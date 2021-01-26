@@ -5,47 +5,54 @@ public class Main{
 
 	public static final Random random = new Random();
     private static int tries = 0;	
-	private enum  Status {CORRECT, WRONG};
+	private enum  Status {CORRECT, WRONG, RESET};
 
 	public static void main(String[] args)
 	{
 
 		Scanner input = new Scanner(System.in);
-		Status status;
+		Status status = Status.CORRECT;
 		int correctAnswers = 0;
-		int question = generateQuestion();
-
+		int question = 0;
+		int answer; 
 		while(true)
 		{		
-			if (tries == 10){
-				tries = 0;
-				System.out.printf("correct: %d%n", correctAnswers);
-				showFeedback(correctAnswers / 10);
-				question = generateQuestion();
-				correctAnswers = 0;
-			}
-			int answer = input.nextInt();
 			
-			status = answer == question ? Status.CORRECT : Status.WRONG;
+			if (tries < 10 && status == Status.CORRECT)
+				question = generateQuestion();
+			if (tries == 10){
+				status = Status.RESET;
+			}
+			else{
+				tries++;
+				answer = input.nextInt();
+				status = answer == question ? Status.CORRECT : Status.WRONG;
+			}
+
 			switch (status)
 			{
 				case CORRECT:
 					correctAnswers++;
 					correctResponse();
-					question = generateQuestion();
 					break;
 				case WRONG:
 					wrongResponse();
-					break;	
+					break;
+				case RESET:
+					tries = 0;
+					status = Status.CORRECT;
+					showFeedback(correctAnswers);
+					System.out.printf("Correct %d out of 10.%n%n", correctAnswers);
+					correctAnswers = 0;
+					break;
 			}
-			tries++;
 		}
 	}
 
-	public static void showFeedback(double percentage)
+	public static void showFeedback(int correct)
 	{
 
-		if (percentage < 0.75)
+		if (correct < 8)
 			System.out.println("Please ask your teacher for extra help.");
 		else
 			System.out.println("Congratulations, you are ready to go to the next level!");
