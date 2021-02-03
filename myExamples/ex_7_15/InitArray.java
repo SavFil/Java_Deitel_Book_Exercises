@@ -8,6 +8,8 @@ public class InitArray {
       int[] array = new int[ARRAY_LENGTH]; // create the array object           
 
 
+
+
       System.out.printf("%s%8s%n", "Index", "Value"); // column headings
    
       // output each array element's value                      
