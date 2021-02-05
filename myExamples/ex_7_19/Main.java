@@ -2,11 +2,16 @@ import java.util.Scanner;
 
 public class Main{
 
+	private static final Scanner input = new Scanner(System.in);
 	private static enum Status {COMPLETED, REJECTED, CHANGED};
+	private static final int FIRST_CLASS = 1;
+	private static final int ECONOMY = 2;
+	private static Status status;
+	private static int seat = 0;
+
 	public static void main(String[] args)
 	{
 		
-		Scanner input = new Scanner(System.in);
 		boolean[] seats = new boolean[10];
 
 		for (int counter = 0; counter <  seats.length; counter++)
@@ -14,98 +19,84 @@ public class Main{
 			System.out.println("1 First class");
 			System.out.println("2 Economy");
 			int choice = input.nextInt();
-			Status status = Status.CHANGED;
-			int seat = 0;
+			status = Status.CHANGED;
 
 			while (status == Status.CHANGED)
 			{
-				switch(choice)
+				if (choice == FIRST_CLASS)
 				{
-					case 1:
-						for (int index = 0; index < 5; index++)
-						{
-							if (!seats[index])
-							{
-								seats[index] = true;
-								seat = index;
-								status = Status.COMPLETED;
-								break;
-							}
-						}
-						if (status == Status.CHANGED)
-						{
-							status = Status.REJECTED;
-							for (int index = 5; index < seats.length; index++)
-							{
-								if (!seats[index])
-								{
-									System.out.println("No available seats in the first class, do you want economy class?");
-									int change = input.nextInt();
-									if (change == 1)
-									{
-										seats[index] = true;
-										seat = index;
-										status = Status.COMPLETED;
-										break;
-									}
-								}
-							}
-						}
-						break;
-					case 2:
-						for (int index = 5; index < seats.length; index++)
-						{
-							if (!seats[index])
-							{
-								seats[index] = true;
-								seat = index;
-								status = Status.COMPLETED;
-								break;
-							}
-						}
-						if (status == Status.CHANGED)
-						{
-							status = Status.REJECTED;
-							for (int index = 0; index < 5; index++)
-							{
-								if (!seats[index])
-								{
-									System.out.println("No available seats in the Economy class, do you want first class?");
-									int change = input.nextInt();
-									if (change == 1)
-									{
-										seats[index] = true;
-										seat = index;
-										status = Status.COMPLETED;
-										break;
-									}
-								}
-							}
-						}
-						break;
-
+					availableSeat(seats, 0, 5);
+					if (status == Status.CHANGED)
+					{
+						alternativeSeat(seats, 5, seats.length);
+					}
+					break;
 				}
-
-				switch (status)
+				else if (choice == ECONOMY)
 				{
-					case COMPLETED:
-						if (seat < 5)
-						{
-							System.out.printf("You reserved seat number %d of the first class%n", seat);
-						}
-						else
-						{
-							System.out.printf("You reservers seat number %d of the economy class%n", seat);
-						}
-						break;
-					case REJECTED:
-						System.out.println("Next flight leaves in 3 hours");
-						break;
+					availableSeat(seats, 5, seats.length);	
+					if (status == Status.CHANGED)
+					{
+						alternativeSeat(seats, 0, 5);
+					}
+					break;
 				}
-
 			}
+			
+			String output = "";
+			switch (status)
+			{
+				case COMPLETED:
+					output = seat < 5 ? String.format("You reserved seat number %d of the first class%n", seat + 1) : 
+										String.format("You reserverd seat number %d of the economy class%n", seat + 1);
+					break;
+				case REJECTED:
+					output = String.format("Next flight leaves in 3 hours%n");
+					break;
+			}
+			System.out.print(output);
 
+		}
+
+	}
+	
+
+	public static void availableSeat(boolean seats[], int start, int end)
+	{
+		for (int index = start; index < end; index++)
+		{
+			if (!seats[index])
+			{
+				seats[index] = true;
+				seat = index;
+				status = Status.COMPLETED;
+				break;
+			}
 		}
 	}
 
+	public static void alternativeSeat(boolean[] seats, int start, int end)
+	{
+
+		for (int index = start; index < end; index++)
+		{
+			if (!seats[index])
+
+			{
+				System.out.println("No available seats in the first class, do you want economy class?");
+				int change = input.nextInt();
+				if (change == 1)
+				{
+					seats[index] = true;
+					seat = index;
+					status = Status.COMPLETED;
+				}
+				else if (change == 2)
+				{
+					status = Status.REJECTED;
+				}
+				break;
+			}
+		}
+	}
 }
