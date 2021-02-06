@@ -74,6 +74,7 @@ public class Main{
 
 		System.out.printf("       Salesperson    1    2    3    4    Total by product%n");
 		System.out.printf("Product%n%n");
+		int[] sumByPerson = new int[COLUMNS];
 		for (int row = 0; row < sales.length; row++)
 		{
 			int sumByProduct = 0;
@@ -81,20 +82,12 @@ public class Main{
 			for (int col = 0; col < sales[row].length; col++)
 			{
 				sumByProduct += sales[row][col];
+				sumByPerson[col] += sales[row][col];
 				System.out.printf("%5d", sales[row][col]); 
 			}
 			System.out.printf("%20d%n", sumByProduct);
 		}
-		System.out.printf("%nTotal by %n  month           ");
-		for (int col = 0; col < COLUMNS; col++)
-		{
-			int sumByMonth = 0;
-			for (int row = 0; row < sales.length; row++)
-			{
-				sumByMonth += sales[row][col];
-			}
-			System.out.printf("%5d", sumByMonth);
-		}
+		System.out.printf("%nTotal by %nSalesperson%12d%5d%5d%5d", sumByPerson[0], sumByPerson[1], sumByPerson[2], sumByPerson[3]);
 		
 		
 	}
