@@ -40,20 +40,14 @@ public class Main{
 			}
 		}
 
-		for (int row[] : board)
-		{
-			for (int col : row)
-			{
-				System.out.printf("%-3d", col);
-			}
-			System.out.println();
-		}
+		printArray2D(board);
 	}
 
 	public static boolean isInbounds(int row, int col, int type)
 	{
-		int nextRow = row + vertical[type];
-		int nextCol = col + horizontal[type];
+		int nextRow = getNextRow(row, type);
+		int nextCol = getNextColumn(col, type);
+
 		boolean inbounds = true;
 
 		inbounds = (nextRow < 0 || nextRow >= ROWS || 
@@ -65,12 +59,34 @@ public class Main{
 
 	public static boolean isFirstVisit(int[][] board, int row, int col, int type)
 	{
-		int nextRow = row + vertical[type];
-		int nextCol = col + horizontal[type];
+		int nextRow = getNextRow(row, type);
+		int nextCol = getNextColumn(col, type);
 		boolean firstVisit = true;
 
 		firstVisit = (board[nextRow][nextCol] == 0) ? true : false;
 
 		return firstVisit;
+	}
+
+	public static int getNextRow(int row, int type)
+	{
+		return row + vertical[type];
+	}
+
+	public static int getNextColumn(int col, int type)
+	{
+		return col + horizontal[type];
+	}
+
+	public static void printArray2D(int[][] array)
+	{
+		for (int row[] : array)
+		{
+			for (int col : row)
+			{
+				System.out.printf("%-3d", col);
+			}
+			System.out.println();
+		}
 	}
 }
