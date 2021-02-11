@@ -8,6 +8,7 @@ public class Main{
 	private static final int[] horizontal = {2, 1, -1, -2, -2, -1, 1, 2};
 	private static final int[]   vertical = {-1, -2, -2, -1, 1, 2, 2, 1};
 	private static final int MOVE_TYPES = 8;
+	private static final int NOT_FOUND = -1;
 	private static final int TYPE_0 = 0;
 	private static final int TYPE_1 = 1;
 	private static final int TYPE_2 = 2;
@@ -17,14 +18,14 @@ public class Main{
 	private static final int TYPE_6 = 6;
 	private static final int TYPE_7 = 7;
 
-	private static final int[][] HEURISTIC = {{2, 3, 4, 4, 4, 4, 3, 2},
-											  {3, 4, 6, 6, 6, 6, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {3, 4, 6, 6, 6, 6, 4, 3},
-											  {2, 3, 4, 4, 4, 4, 3, 2}};
+	private static int[][] HEURISTIC = {{2, 3, 4, 4, 4, 4, 3, 2},
+									   {3, 4, 6, 6, 6, 6, 4, 3},
+									   {4, 6, 8, 8, 8, 8, 4, 3},
+									   {4, 6, 8, 8, 8, 8, 4, 3},
+									   {4, 6, 8, 8, 8, 8, 4, 3},
+									   {4, 6, 8, 8, 8, 8, 4, 3},
+									   {3, 4, 6, 6, 6, 6, 4, 3},
+									   {2, 3, 4, 4, 4, 4, 3, 2}};
 
 	private static class Chessboard
 	{
@@ -35,8 +36,8 @@ public class Main{
 		public Chessboard()
 		{
 			board = new int[ROWS][COLUMNS];
-			currentRow = 0;
-			currentColumn = 0;
+			currentRow = 7;
+			currentColumn = 7;
 		}
 
 		public int[][] getBoard()
@@ -53,6 +54,7 @@ public class Main{
 		{
 			board[currentRow][currentColumn] = value;
 		}
+
 
 		public int getCurrentSquare()
 		{
@@ -96,22 +98,45 @@ public class Main{
 		
 		for (int step = 1; step <= SQUARES; step++)
 		{
+			int bestType = NOT_FOUND;
+			int min = 999;
+
 			for (int type = TYPE_0; type < MOVE_TYPES; type++)
 			{
 				int nextRow = chessboard.getCurrentRow() + vertical[type];
 				int nextColumn = chessboard.getCurrentColumn() + horizontal[type];
-								
-				if (isInbounds(nextRow, nextColumn) &&
-							isFirstVisit(nextRow, nextColumn))
+				
+				if (isInbounds(nextRow, nextColumn))
 				{
-					chessboard.simpleStep(vertical[type], horizontal[type], step);
-					break;
+					updateHeuristic(nextRow, nextColumn);
+					if	(isFirstVisit(nextRow, nextColumn))
+					{
+						if (HEURISTIC[nextRow][nextColumn] < min)
+						{
+							min = HEURISTIC[nextRow][nextColumn];
+							bestType = type;
+						}
+					}
 				}
+			}
+			if (bestType != NOT_FOUND)
+			{
+				chessboard.simpleStep(vertical[bestType], horizontal[bestType], step);
+			}
+			else
+			{
+				break;
 			}
 		}
 		
 
 		printArray2D(chessboard.getBoard());
+		printArray2D(HEURISTIC);
+	}
+
+	public static void updateHeuristic(int row, int col)
+	{
+	    HEURISTIC[row][col] -= HEURISTIC[row][col] > 0 ? 1 : 0;	
 	}
 
 	public static boolean isInbounds(int row, int col)
@@ -145,5 +170,7 @@ public class Main{
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
+
 }
