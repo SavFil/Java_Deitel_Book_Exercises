@@ -1,9 +1,11 @@
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Main{
 
 	private static final int ROWS = 8;
 	private static final int COLUMNS = 8;
 	private static final int SQUARES = 64;
-	
 	
 	private static final int[] horizontal = {2, 1, -1, -2, -2, -1, 1, 2};
 	private static final int[]   vertical = {-1, -2, -2, -1, 1, 2, 2, 1};
@@ -17,14 +19,15 @@ public class Main{
 	private static final int TYPE_6 = 6;
 	private static final int TYPE_7 = 7;
 
-	private static final int[][] HEURISTIC = {{2, 3, 4, 4, 4, 4, 3, 2},
-											  {3, 4, 6, 6, 6, 6, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {4, 6, 8, 8, 8, 8, 4, 3},
-											  {3, 4, 6, 6, 6, 6, 4, 3},
-											  {2, 3, 4, 4, 4, 4, 3, 2}};
+	private static final int[][] PROTOTYPE = {{2, 3, 4, 4, 4, 4, 3, 2},
+											   {3, 4, 6, 6, 6, 6, 4, 3},
+											   {4, 6, 8, 8, 8, 8, 4, 3},
+											   {4, 6, 8, 8, 8, 8, 4, 3},
+											   {4, 6, 8, 8, 8, 8, 4, 3},
+											   {4, 6, 8, 8, 8, 8, 4, 3},
+											   {3, 4, 6, 6, 6, 6, 4, 3},
+											   {2, 3, 4, 4, 4, 4, 3, 2}};
+	private static int[][] HEURISTIC = new int[ROWS][COLUMNS];
 
 	private static class Chessboard
 	{
@@ -32,11 +35,11 @@ public class Main{
 		private int currentRow;
 		private int currentColumn;
 
-		public Chessboard()
+		public Chessboard(int row, int col)
 		{
 			board = new int[ROWS][COLUMNS];
-			currentRow = 0;
-			currentColumn = 0;
+			currentRow = row;
+			currentColumn = col;
 		}
 
 		public int[][] getBoard()
@@ -53,6 +56,7 @@ public class Main{
 		{
 			board[currentRow][currentColumn] = value;
 		}
+
 
 		public int getCurrentSquare()
 		{
@@ -87,32 +91,119 @@ public class Main{
 		}
 	}
 
-	private static Chessboard chessboard = new Chessboard();
-	
+	private static Chessboard chessboard;
+	private static Random random = new Random();
 
 	public static void main(String[] args)
 	{
-
-		
-		for (int step = 1; step <= SQUARES; step++)
+		for (int rowIndex = 0; rowIndex < ROWS; rowIndex++)
 		{
-			for (int type = TYPE_0; type < MOVE_TYPES; type++)
-			{
-				int nextRow = chessboard.getCurrentRow() + vertical[type];
-				int nextColumn = chessboard.getCurrentColumn() + horizontal[type];
-								
-				if (isInbounds(nextRow, nextColumn) &&
-							isFirstVisit(nextRow, nextColumn))
-				{
-					chessboard.simpleStep(vertical[type], horizontal[type], step);
-					break;
-				}
+			for (int colIndex = 0; colIndex < COLUMNS; colIndex++)
+			{		
+				System.out.printf("Starting row: %d, col: %d%n", rowIndex, colIndex);
+				printLine();
+				chessboard = new Chessboard(rowIndex, colIndex);
+				fullTour();
+				printArray2D(chessboard.getBoard());
+				printArray2D(HEURISTIC);
+				printLine();
 			}
 		}
-		
-
-		printArray2D(chessboard.getBoard());
 	}
+
+	public static void printLine()
+	{
+		System.out.printf("%n****************************************%n");
+	}
+
+	public static void fullTour()
+	{	
+		ArrayList<Integer> candidates = new ArrayList<Integer>();
+		resetHeuristic();
+	    int step = 1;
+
+
+		do
+		{
+			candidates.clear();
+
+			for (int type = TYPE_0; type < MOVE_TYPES; type++)
+			{
+				int nextRow = getNextRow(type);
+				int nextColumn = getNextColumn(type);
+				
+				if (isInbounds(nextRow, nextColumn))
+				{
+					updateHeuristic(nextRow, nextColumn);
+					if	(isFirstVisit(nextRow, nextColumn))
+					{
+						candidates.add(type);
+					}
+				}
+			}
+
+			if (candidates.size() > 0)
+			{
+			    //int	bestType = randomType(candidates);
+			    int	bestType = leastAccessible(candidates);
+
+				chessboard.simpleStep(vertical[bestType], horizontal[bestType], step);
+			}
+				
+			step++;	
+		}while (candidates.size() > 0);
+
+
+	}
+
+	public static int getNextRow(int type)
+	{
+		return chessboard.getCurrentRow() + vertical[type];
+	}
+
+	public static int getNextColumn(int type)
+	{
+		return chessboard.getCurrentColumn() + horizontal[type];
+	}
+
+	public static void updateHeuristic(int row, int col)
+	{
+	    HEURISTIC[row][col] -= HEURISTIC[row][col] > 0 ? 1 : 0;	
+	}
+
+	public static void resetHeuristic()
+	{
+		for (int row = 0; row < ROWS; row++)
+		{
+			System.arraycopy(PROTOTYPE[row], 0, HEURISTIC[row], 0, COLUMNS); 
+		}
+	}
+	
+	public static int randomType(ArrayList<Integer> candidates)
+	{
+		return candidates.get(random.nextInt(candidates.size()));
+	}
+
+	public static int leastAccessible(ArrayList<Integer> candidates)
+	{
+		int min = 999;
+		int type = -1;
+
+		for (int candidate : candidates)
+		{
+			int nextRow = getNextRow(candidate);
+			int nextColumn = getNextColumn(candidate);
+			int heuristic = HEURISTIC[nextRow][nextColumn]; 
+			
+			if (heuristic < min)
+			{
+				min = heuristic;
+				type = candidate;
+			}
+		}
+		return type;
+	}
+
 
 	public static boolean isInbounds(int row, int col)
 	{
@@ -145,5 +236,7 @@ public class Main{
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
+
 }

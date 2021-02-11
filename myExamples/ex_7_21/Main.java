@@ -32,9 +32,9 @@ public class Main{
 
 		int[][] floor = new int[ROWS][COLUMNS];
 		int[][] commands = {{PEN_DOWN}, 
-							{MOVE_FORWARD, 12},
+							{MOVE_FORWARD, 4},
 							{TURN_RIGHT},
-							{MOVE_FORWARD, 12},
+							{MOVE_FORWARD, 2},
 							{TURN_RIGHT},
 							{MOVE_FORWARD, 12},
 							{TURN_RIGHT},
