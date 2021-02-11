@@ -17,65 +17,122 @@ public class Main{
 	private static final int TYPE_6 = 6;
 	private static final int TYPE_7 = 7;
 
+	private static final int[][] HEURISTIC = {{2, 3, 4, 4, 4, 4, 3, 2},
+											  {3, 4, 6, 6, 6, 6, 4, 3},
+											  {4, 6, 8, 8, 8, 8, 4, 3},
+											  {4, 6, 8, 8, 8, 8, 4, 3},
+											  {4, 6, 8, 8, 8, 8, 4, 3},
+											  {4, 6, 8, 8, 8, 8, 4, 3},
+											  {3, 4, 6, 6, 6, 6, 4, 3},
+											  {2, 3, 4, 4, 4, 4, 3, 2}};
+
+	private static class Chessboard
+	{
+		private int[][] board;
+		private int currentRow;
+		private int currentColumn;
+
+		public Chessboard()
+		{
+			board = new int[ROWS][COLUMNS];
+			currentRow = 0;
+			currentColumn = 0;
+		}
+
+		public int[][] getBoard()
+		{
+			return board;
+		}
+
+		public int getSquare(int row, int col)
+		{
+			return board[row][col];
+		}
+
+		public void setCurrentSquare(int value)
+		{
+			board[currentRow][currentColumn] = value;
+		}
+
+		public int getCurrentSquare()
+		{
+			return board[currentRow][currentColumn];
+		}
+
+		public void setCurrentRow(int row)
+		{
+			currentRow += row;
+		}
+
+		public int getCurrentRow()
+		{
+			return currentRow;
+		}
+
+		public void setCurrentColumn(int col)
+		{
+			currentColumn += col;
+		}
+
+		public int getCurrentColumn()
+		{
+			return currentColumn;
+		}
+
+		public void simpleStep(int verticalStep, int horizontalStep, int stepNumber)
+		{
+			setCurrentRow(verticalStep);
+			setCurrentColumn(horizontalStep);
+			setCurrentSquare(stepNumber);
+		}
+	}
+
+	private static Chessboard chessboard = new Chessboard();
+	
+
 	public static void main(String[] args)
 	{
-		int[][] board = new int[ROWS][COLUMNS];
-		
-		int currentRow = 0;
-		int currentColumn = 0;
-		
 
+		
 		for (int step = 1; step <= SQUARES; step++)
 		{
 			for (int type = TYPE_0; type < MOVE_TYPES; type++)
 			{
-				if (isInbounds(currentRow, currentColumn, type) &&
-							isFirstVisit(board, currentRow, currentColumn, type))
+				int nextRow = chessboard.getCurrentRow() + vertical[type];
+				int nextColumn = chessboard.getCurrentColumn() + horizontal[type];
+								
+				if (isInbounds(nextRow, nextColumn) &&
+							isFirstVisit(nextRow, nextColumn))
 				{
-					currentRow += vertical[type];
-					currentColumn += horizontal[type];
-					board[currentRow][currentColumn] = step;
+					chessboard.simpleStep(vertical[type], horizontal[type], step);
 					break;
 				}
 			}
 		}
+		
 
-		printArray2D(board);
+		printArray2D(chessboard.getBoard());
 	}
 
-	public static boolean isInbounds(int row, int col, int type)
+	public static boolean isInbounds(int row, int col)
 	{
-		int nextRow = getNextRow(row, type);
-		int nextCol = getNextColumn(col, type);
 
 		boolean inbounds = true;
 
-		inbounds = (nextRow < 0 || nextRow >= ROWS || 
-				nextCol < 0 || nextCol >= COLUMNS) ? false : true;
+		inbounds = (row < 0 || row >= ROWS || 
+				col < 0 || col >= COLUMNS) ? false : true;
 
 		return inbounds;
 		
 	}
 
-	public static boolean isFirstVisit(int[][] board, int row, int col, int type)
+	public static boolean isFirstVisit(int row, int col)
 	{
-		int nextRow = getNextRow(row, type);
-		int nextCol = getNextColumn(col, type);
 		boolean firstVisit = true;
 
-		firstVisit = (board[nextRow][nextCol] == 0) ? true : false;
+		firstVisit = (chessboard.getSquare(row, col) == 0) ? true : false;
 
 		return firstVisit;
-	}
-
-	public static int getNextRow(int row, int type)
-	{
-		return row + vertical[type];
-	}
-
-	public static int getNextColumn(int col, int type)
-	{
-		return col + horizontal[type];
 	}
 
 	public static void printArray2D(int[][] array)
