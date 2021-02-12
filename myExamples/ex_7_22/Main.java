@@ -166,6 +166,15 @@ public class Main{
 		return chessboard.getCurrentColumn() + horizontal[type];
 	}
 
+	public static int getSecondNextRow(int firstType, int secondType)
+	{
+		return chessboard.getCurrentRow() + vertical[firstType] + vertical[secondType];
+	}
+
+	public static int getSecondNextColumn(int firstType, int secondType)
+	{
+		return chessboard.getCurrentColumn() + horizontal[firstType] + horizontal[secondType];
+	}
 	public static void updateHeuristic(int row, int col)
 	{
 	    HEURISTIC[row][col] -= HEURISTIC[row][col] > 0 ? 1 : 0;	
@@ -188,6 +197,7 @@ public class Main{
 	{
 		int min = 999;
 		int type = -1;
+		ArrayList<Integer> secondPass = new ArrayList<Integer>();
 
 		for (int candidate : candidates)
 		{
@@ -201,6 +211,46 @@ public class Main{
 				type = candidate;
 			}
 		}
+
+		for (int candidate : candidates)
+		{
+			int nextRow = getNextRow(candidate);
+			int nextColumn = getNextColumn(candidate);
+			int heuristic = HEURISTIC[nextRow][nextColumn]; 
+			
+			if (heuristic == min)
+			{
+				secondPass.add(candidate);
+			}
+		}
+
+		if (secondPass.size() > 0 )
+		{
+		 	min = 999;	
+			for (int candidate : secondPass)
+			{
+				for (int nextType = TYPE_0; nextType < MOVE_TYPES; nextType++)
+				{
+					int nextRow = getSecondNextRow(candidate, nextType);
+					int nextColumn = getSecondNextColumn(candidate, nextType);
+					
+					if (isInbounds(nextRow, nextColumn) &&
+							isFirstVisit(nextRow, nextColumn)) 
+					{
+						int heuristic = HEURISTIC[nextRow][nextColumn]; 
+						
+						if (heuristic < min)
+						{
+							min = heuristic;
+							type = candidate;
+						}
+					}
+				}
+			}
+		}
+
+
+		
 		return type;
 	}
 
