@@ -20,7 +20,6 @@ public class Main{
 	private static final int TYPE_6 = 6;
 	private static final int TYPE_7 = 7;
 
-<<<<<<< HEAD
 	private static final int[][] PROTOTYPE = {{2, 3, 4, 4, 4, 4, 3, 2},
 											   {3, 4, 6, 6, 6, 6, 4, 3},
 											   {4, 6, 8, 8, 8, 8, 4, 3},
@@ -30,16 +29,6 @@ public class Main{
 											   {3, 4, 6, 6, 6, 6, 4, 3},
 											   {2, 3, 4, 4, 4, 4, 3, 2}};
 	private static int[][] HEURISTIC = new int[ROWS][COLUMNS];
-=======
-	private static int[][] HEURISTIC = {{2, 3, 4, 4, 4, 4, 3, 2},
-									   {3, 4, 6, 6, 6, 6, 4, 3},
-									   {4, 6, 8, 8, 8, 8, 4, 3},
-									   {4, 6, 8, 8, 8, 8, 4, 3},
-									   {4, 6, 8, 8, 8, 8, 4, 3},
-									   {4, 6, 8, 8, 8, 8, 4, 3},
-									   {3, 4, 6, 6, 6, 6, 4, 3},
-									   {2, 3, 4, 4, 4, 4, 3, 2}};
->>>>>>> da2f5988fe8c20ad2598316fad663811961e51a6
 
 	private static class Chessboard
 	{
@@ -50,13 +39,8 @@ public class Main{
 		public Chessboard(int row, int col)
 		{
 			board = new int[ROWS][COLUMNS];
-<<<<<<< HEAD
 			currentRow = row;
 			currentColumn = col;
-=======
-			currentRow = 7;
-			currentColumn = 7;
->>>>>>> da2f5988fe8c20ad2598316fad663811961e51a6
 		}
 
 		public int[][] getBoard()
@@ -142,29 +126,18 @@ public class Main{
 
 		do
 		{
-<<<<<<< HEAD
 			candidates.clear();
 
 			for (int type = TYPE_0; type < MOVE_TYPES; type++)
 			{
 				int nextRow = getNextRow(type);
 				int nextColumn = getNextColumn(type);
-=======
-			int bestType = NOT_FOUND;
-			int min = 999;
-
-			for (int type = TYPE_0; type < MOVE_TYPES; type++)
-			{
-				int nextRow = chessboard.getCurrentRow() + vertical[type];
-				int nextColumn = chessboard.getCurrentColumn() + horizontal[type];
->>>>>>> da2f5988fe8c20ad2598316fad663811961e51a6
 				
 				if (isInbounds(nextRow, nextColumn))
 				{
 					updateHeuristic(nextRow, nextColumn);
 					if	(isFirstVisit(nextRow, nextColumn))
 					{
-<<<<<<< HEAD
 						candidates.add(type);
 					}
 				}
@@ -237,27 +210,9 @@ public class Main{
 			{
 				min = heuristic;
 				type = candidate;
-=======
-						if (HEURISTIC[nextRow][nextColumn] < min)
-						{
-							min = HEURISTIC[nextRow][nextColumn];
-							bestType = type;
-						}
-					}
-				}
-			}
-			if (bestType != NOT_FOUND)
-			{
-				chessboard.simpleStep(vertical[bestType], horizontal[bestType], step);
-			}
-			else
-			{
-				break;
->>>>>>> da2f5988fe8c20ad2598316fad663811961e51a6
 			}
 		}
 
-<<<<<<< HEAD
 		for (int candidate : candidates)
 		{
 			int nextRow = getNextRow(candidate);
@@ -298,15 +253,6 @@ public class Main{
 
 		
 		return type;
-=======
-		printArray2D(chessboard.getBoard());
-		printArray2D(HEURISTIC);
-	}
-
-	public static void updateHeuristic(int row, int col)
-	{
-	    HEURISTIC[row][col] -= HEURISTIC[row][col] > 0 ? 1 : 0;	
->>>>>>> da2f5988fe8c20ad2598316fad663811961e51a6
 	}
 
 
