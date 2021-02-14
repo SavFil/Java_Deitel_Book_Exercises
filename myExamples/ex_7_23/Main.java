@@ -98,7 +98,7 @@ public class Main{
 	public static void main(String[] args)
 	{
 		int[] tours = new int[65];
-		while (tours[64] == 0)
+		for (int counter = 0; counter < 1000; counter++)	
 		{
 			for (int rowIndex = 0; rowIndex < ROWS; rowIndex++)
 			{
