@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Main{
 
 	private static final int ROWS = 8;
@@ -8,24 +10,27 @@ public class Main{
 	private static final int[] VERTICAL   = {0, -1, -1, -1, 0, 1, 1, 1};
 
 	private static int queens = 1;
+	private static final Random random = new Random();
 
 	public static void main(String[] args)
 	{
 		int[][] heuristic = new int[ROWS][COLUMNS];
 		int[][] board = new int[ROWS][COLUMNS];	
-		generateHeuristic(heuristic);
-		for (int rowIndex = 0; rowIndex < ROWS; rowIndex++)
+		generateHeuristic(board,heuristic);
+		print2DArray(heuristic);
+
+		for (int rowIndex = 0; rowIndex < 1; rowIndex++)
 		{
 			for (int colIndex = 0; colIndex < COLUMNS; colIndex++)
 			{
-	    		placeQueen(board, rowIndex, colIndex);	
+					placeQueen(board, heuristic, rowIndex, colIndex);
 			}
 		}
 		print2DArray(board);
 		print2DArray(heuristic);
 	}
 
-	public static void placeQueen(int[][] board, int row, int col)
+	public static void placeQueen(int[][] board,int[][] heuristic, int row, int col)
 	{
 		int nextRow;
 		int nextColumn;
@@ -45,34 +50,54 @@ public class Main{
 			}
 			++queens;
 		}
-
+		generateHeuristic(board, heuristic);
 	}
 
-	public static void generateHeuristic(int[][] heuristic)
+	public static void generateHeuristic(int[][] board, int[][] heuristic)
 	{
+		int[][] tmp = new int[ROWS][COLUMNS];
 
 		for (int rowIndex = 0; rowIndex < ROWS; rowIndex++)
 		{
 			for (int colIndex = 0; colIndex < COLUMNS; colIndex++)
 			{
-				int nextRow = rowIndex;
-				int nextColumn = colIndex; 
-				int move = 0;
-				while (move < MOVES)
+				if (board[rowIndex][colIndex] == 0)
 				{
-					while (isInBounds(nextRow, nextColumn))
+					int nextRow = rowIndex;
+					int nextColumn = colIndex; 
+					int move = 0;
+					while (move < MOVES)
 					{
-						nextRow += VERTICAL[move];
-						nextColumn += HORIZONTAL[move]; 
-						heuristic[rowIndex][colIndex]++;
-					}
-					if (++move < MOVES)
-					{
-						nextRow = rowIndex + VERTICAL[move];
-						nextColumn = colIndex + HORIZONTAL[move]; 
+						while (isInBounds(nextRow, nextColumn))
+						{
+							if (board[nextRow][nextColumn] == 0)
+							{
+								tmp[rowIndex][colIndex]++;
+							}
+							else
+							{
+								break;
+							}
+							nextRow += VERTICAL[move];
+							nextColumn += HORIZONTAL[move]; 
+						}
+						if (++move < MOVES)
+						{
+							nextRow = rowIndex + VERTICAL[move];
+							nextColumn = colIndex + HORIZONTAL[move]; 
+						}
 					}
 				}
+				else
+				{
+					tmp[rowIndex][colIndex] = -1;
+				}
 			}
+		}
+
+		for (int row = 0; row < ROWS; row++)
+		{
+			System.arraycopy(tmp[row], 0, heuristic[row], 0, COLUMNS);
 		}
 
 	}
