@@ -17,17 +17,44 @@ public class Main{
 		int[][] heuristic = new int[ROWS][COLUMNS];
 		int[][] board = new int[ROWS][COLUMNS];	
 		generateHeuristic(board,heuristic);
+		print2DArray(board);
 		print2DArray(heuristic);
+		int position[] = new int[2];
+		for (int turn = 0; turn < 8; turn++)
+		{
+			position = pickMinPosition(heuristic);
+			placeQueen(board, heuristic, position[0], position[1]);
+			print2DArray(board);
+			print2DArray(heuristic);
+		}
 
-		for (int rowIndex = 0; rowIndex < 1; rowIndex++)
+		/*
+		 * 1) try with random candidates
+		 * 2) try looking behind the wall
+		 *
+		 * */
+	}
+
+	public static int[] pickMinPosition(int[][] heuristic)
+	{
+		int[] minPosition = new int[2];
+		int min = 99;
+		
+		for (int rowIndex = 0; rowIndex < ROWS; rowIndex++)
 		{
 			for (int colIndex = 0; colIndex < COLUMNS; colIndex++)
 			{
-					placeQueen(board, heuristic, rowIndex, colIndex);
+				if (heuristic[rowIndex][colIndex] >= 0 &&
+						heuristic[rowIndex][colIndex] < min)
+				{
+					minPosition[0] = rowIndex;
+					minPosition[1] = colIndex;
+					min = heuristic[rowIndex][colIndex];
+				}
 			}
 		}
-		print2DArray(board);
-		print2DArray(heuristic);
+		System.out.println(minPosition[0] + " " + minPosition[1]);
+		return minPosition;
 	}
 
 	public static void placeQueen(int[][] board,int[][] heuristic, int row, int col)
