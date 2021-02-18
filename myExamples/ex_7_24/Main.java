@@ -14,24 +14,26 @@ public class Main{
 
 	public static void main(String[] args)
 	{
+		int TURN = Integer.parseInt(args[0]);
 		int[][] heuristic = new int[ROWS][COLUMNS];
 		int[][] board = new int[ROWS][COLUMNS];	
 		generateHeuristic(board,heuristic);
-		print2DArray(board);
-		print2DArray(heuristic);
+		//print2DArray(board);
+		//print2DArray(heuristic);
 		int position[] = new int[2];
-		for (int turn = 0; turn < 8; turn++)
+		for (int turn = 0; turn < TURN; turn++)
 		{
 			position = pickMinPosition(heuristic);
+			System.out.println(position[0] + " " + position[1]);
 			placeQueen(board, heuristic, position[0], position[1]);
-			print2DArray(board);
-			print2DArray(heuristic);
 		}
+		print2DArray(board);
+		print2DArray(heuristic);
 
 		/*
-		 * 1) try with random candidates
-		 * 2) try looking behind the wall
-		 *
+		 * 1) try looking behind the wall -done
+		 * 2) try starting from all positions, for both algorithms
+		 * 3) try with random candidates, starting from all positions, for both algorithms
 		 * */
 	}
 
@@ -53,7 +55,6 @@ public class Main{
 				}
 			}
 		}
-		System.out.println(minPosition[0] + " " + minPosition[1]);
 		return minPosition;
 	}
 
@@ -101,6 +102,13 @@ public class Main{
 							{
 								tmp[rowIndex][colIndex]++;
 							}
+							//****************************************************************************
+							//look ahead 
+							else if (isInBounds(nextRow + VERTICAL[move], nextColumn + HORIZONTAL[move]) &&
+										board[nextRow + VERTICAL[move]][nextColumn + HORIZONTAL[move]] == 0)
+							{
+							}
+							//*****************************************************************************
 							else
 							{
 								break;
