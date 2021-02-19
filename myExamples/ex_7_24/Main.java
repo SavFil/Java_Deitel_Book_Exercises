@@ -14,6 +14,7 @@ public class Main{
 
 	public static void main(String[] args)
 	{
+		System.out.println("Without Look Forward");
 		int TURN = Integer.parseInt(args[0]);
 		int[][] heuristic = new int[ROWS][COLUMNS];
 		int[][] board = new int[ROWS][COLUMNS];	
@@ -21,19 +22,34 @@ public class Main{
 		//print2DArray(board);
 		//print2DArray(heuristic);
 		int position[] = new int[2];
-		for (int turn = 0; turn < TURN; turn++)
+		
+		for (int i = 0 ; i < ROWS; i++)
+			for (int j = 0; j < COLUMNS; j++)
 		{
-			position = pickMinPosition(heuristic);
-			System.out.println(position[0] + " " + position[1]);
-			placeQueen(board, heuristic, position[0], position[1]);
-		}
-		print2DArray(board);
-		print2DArray(heuristic);
+				queens = 1;
+				heuristic = new int[ROWS][COLUMNS];
+				board = new int[ROWS][COLUMNS];	
+				generateHeuristic(board,heuristic);
+				position[0] = i; 
+				position[1] = j; 
+				System.out.println(position[0] + " " + position[1]);
+				placeQueen(board, heuristic, position[0], position[1]);
 
+				for (int turn = 1; turn < TURN; turn++)
+				{
+					position = pickMinPosition(heuristic);
+					System.out.println(position[0] + " " + position[1]);
+					placeQueen(board, heuristic, position[0], position[1]);
+				}
+				print2DArray(board);
+				print2DArray(heuristic);
+				if (queens == 9) System.out.println("8queens");
+		}
 		/*
 		 * 1) try looking behind the wall -done
-		 * 2) try starting from all positions, for both algorithms
+		 * 2) try starting from all positions, for both algorithms -done
 		 * 3) try with random candidates, starting from all positions, for both algorithms
+		 * 4) refactor code and be done with it
 		 * */
 	}
 
@@ -104,10 +120,10 @@ public class Main{
 							}
 							//****************************************************************************
 							//look ahead 
-							else if (isInBounds(nextRow + VERTICAL[move], nextColumn + HORIZONTAL[move]) &&
-										board[nextRow + VERTICAL[move]][nextColumn + HORIZONTAL[move]] == 0)
-							{
-							}
+							//else if (isInBounds(nextRow + VERTICAL[move], nextColumn + HORIZONTAL[move]) &&
+							//			board[nextRow + VERTICAL[move]][nextColumn + HORIZONTAL[move]] == 0)
+							//{
+							//}
 							//*****************************************************************************
 							else
 							{
@@ -130,6 +146,7 @@ public class Main{
 			}
 		}
 
+	
 		for (int row = 0; row < ROWS; row++)
 		{
 			System.arraycopy(tmp[row], 0, heuristic[row], 0, COLUMNS);
