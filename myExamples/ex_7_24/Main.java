@@ -80,8 +80,7 @@ public class Main{
 			{
 				if (heuristic[rowIndex][colIndex] == min)
 				{
-					int[] tmp = {rowIndex, colIndex};
-					candidates.add(tmp);
+					candidates.add(new int[]{rowIndex, colIndex});
 				}
 			}
 		}
