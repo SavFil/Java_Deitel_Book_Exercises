@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.ArrayList;
 
 public class Main{
 
@@ -48,7 +49,7 @@ public class Main{
 		/*
 		 * 1) try looking behind the wall -done
 		 * 2) try starting from all positions, for both algorithms -done
-		 * 3) try with random candidates, starting from all positions, for both algorithms
+		 * 3) try with random candidates, starting from all positions, for both algorithms done
 		 * 4) refactor code and be done with it
 		 * */
 	}
@@ -57,7 +58,8 @@ public class Main{
 	{
 		int[] minPosition = new int[2];
 		int min = 99;
-		
+		ArrayList<int[]> candidates = new ArrayList<int[]>();
+
 		for (int rowIndex = 0; rowIndex < ROWS; rowIndex++)
 		{
 			for (int colIndex = 0; colIndex < COLUMNS; colIndex++)
@@ -71,6 +73,24 @@ public class Main{
 				}
 			}
 		}
+
+		for (int rowIndex = 0; rowIndex < ROWS; rowIndex++)
+		{
+			for (int colIndex = 0; colIndex < COLUMNS; colIndex++)
+			{
+				if (heuristic[rowIndex][colIndex] == min)
+				{
+					int[] tmp = {rowIndex, colIndex};
+					candidates.add(tmp);
+				}
+			}
+		}
+
+		if (candidates.size() > 0)
+		{
+			minPosition = candidates.get(random.nextInt(candidates.size()));
+		}
+
 		return minPosition;
 	}
 
@@ -120,10 +140,10 @@ public class Main{
 							}
 							//****************************************************************************
 							//look ahead 
-							//else if (isInBounds(nextRow + VERTICAL[move], nextColumn + HORIZONTAL[move]) &&
-							//			board[nextRow + VERTICAL[move]][nextColumn + HORIZONTAL[move]] == 0)
-							//{
-							//}
+//							else if (isInBounds(nextRow + VERTICAL[move], nextColumn + HORIZONTAL[move]) &&
+//										board[nextRow + VERTICAL[move]][nextColumn + HORIZONTAL[move]] == 0)
+//							{
+//							}
 							//*****************************************************************************
 							else
 							{
