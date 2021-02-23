@@ -6,7 +6,6 @@ public class Main{
 	private static final int ROWS = 8;
 	private static final int COLUMNS = 8;
 	private static final int SQUARES = 64;
-	
 	private static final int[] horizontal = {2, 1, -1, -2, -2, -1, 1, 2};
 	private static final int[]   vertical = {-1, -2, -2, -1, 1, 2, 2, 1};
 	private static final int MOVE_TYPES = 8;
@@ -118,7 +117,7 @@ public class Main{
 	}
 
 	public static void fullTour()
-	{	
+	{
 		ArrayList<Integer> candidates = new ArrayList<Integer>();
 		resetHeuristic();
 	    int step = 1;
@@ -132,7 +131,7 @@ public class Main{
 			{
 				int nextRow = getNextRow(type);
 				int nextColumn = getNextColumn(type);
-				
+
 				if (isInbounds(nextRow, nextColumn))
 				{
 					updateHeuristic(nextRow, nextColumn);
@@ -149,9 +148,23 @@ public class Main{
 			    int	bestType = leastAccessible(candidates);
 
 				chessboard.simpleStep(vertical[bestType], horizontal[bestType], step);
+				if (step == 64)
+				{
+					for (int type = TYPE_0; type < MOVE_TYPES; type++)
+					{
+						int nextRow = getNextRow(type);
+						int nextColumn = getNextColumn(type);
+
+						if (isInbounds(nextRow, nextColumn) && 
+								chessboard.getSquare(nextRow, nextColumn) == 1)
+						{
+							System.out.println("Closed tour");
+						}
+					}
+				}
 			}
-				
-			step++;	
+
+			step++;
 		}while (candidates.size() > 0);
 
 
@@ -188,7 +201,7 @@ public class Main{
 			System.arraycopy(PROTOTYPE[row], 0, HEURISTIC[row], 0, COLUMNS); 
 		}
 	}
-	
+
 	public static int randomType(ArrayList<Integer> candidates)
 	{
 		return candidates.get(random.nextInt(candidates.size()));
@@ -205,7 +218,7 @@ public class Main{
 			int nextRow = getNextRow(candidate);
 			int nextColumn = getNextColumn(candidate);
 			int heuristic = HEURISTIC[nextRow][nextColumn]; 
-			
+
 			if (heuristic < min)
 			{
 				min = heuristic;
@@ -218,7 +231,7 @@ public class Main{
 			int nextRow = getNextRow(candidate);
 			int nextColumn = getNextColumn(candidate);
 			int heuristic = HEURISTIC[nextRow][nextColumn]; 
-			
+
 			if (heuristic == min)
 			{
 				secondPass.add(candidate);
@@ -234,12 +247,12 @@ public class Main{
 				{
 					int nextRow = getSecondNextRow(candidate, nextType);
 					int nextColumn = getSecondNextColumn(candidate, nextType);
-					
+
 					if (isInbounds(nextRow, nextColumn) &&
 							isFirstVisit(nextRow, nextColumn)) 
 					{
 						int heuristic = HEURISTIC[nextRow][nextColumn]; 
-						
+
 						if (heuristic < min)
 						{
 							min = heuristic;
@@ -251,7 +264,7 @@ public class Main{
 		}
 
 
-		
+
 		return type;
 	}
 
@@ -265,7 +278,7 @@ public class Main{
 				col < 0 || col >= COLUMNS) ? false : true;
 
 		return inbounds;
-		
+
 	}
 
 	public static boolean isFirstVisit(int row, int col)
