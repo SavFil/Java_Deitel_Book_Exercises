@@ -5,7 +5,7 @@ public class Main {
 		DeckOfCards myDeckOfCards = new DeckOfCards();
 		myDeckOfCards.shuffle();
 
-		for (int i = 1; i <= 52; i++)
+		for (int i = 1; i <= 5; i++)
 		{
 			System.out.printf("%-19s", myDeckOfCards.dealCard());
 
@@ -14,5 +14,6 @@ public class Main {
 				System.out.println();
 			}
 		}
+
 	}
 }

@@ -9,6 +9,16 @@ public class Card{
 		this.suit = suit;
 	}
 
+	public String getFace()
+	{
+		return face;
+	}
+
+	public String getSuite()
+	{
+		return suit;
+	}
+
 	public String toString()
 	{
 		return face + " of " + suit;
