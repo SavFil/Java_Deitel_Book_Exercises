@@ -81,7 +81,7 @@ public class DeckOfCards{
 
 		for (int index = 0; index < tmp.length; index++)
 		{
-			tmp[index] = hand[index].getCardNumber() % 13;
+			tmp[index] = mapZeroThirteen(hand[index].getCardNumber());
 		}
 		Arrays.sort(tmp);
 
@@ -94,6 +94,11 @@ public class DeckOfCards{
 			}
 		}
 		return check;
+	}
+
+	public int mapZeroThirteen(int cardNumber)
+	{
+		return cardNumber - 13 * (cardNumber / 13);
 	}
 
 
