@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Arrays;
 
 public class DeckOfCards{
 
@@ -18,7 +19,7 @@ public class DeckOfCards{
 
 		for (int count = 0; count < deck.length; count++)
 		{
-			deck[count] = new Card(faces[count % 13], suits[count / 13]);
+			deck[count] = new Card(faces[count % 13], suits[count / 13], count);
 		}
 	}
 
@@ -70,13 +71,31 @@ public class DeckOfCards{
 	public boolean checkFlush(Card first, Card second, Card third, Card fourth, Card fifth)
 	{
 		return first.getSuit() == second.getSuit() && first.getSuit() == third.getSuit() &&
-			first.getsuit() == fourth.getSuit() && first.getSuit() == fifth.getSuit();
+			first.getSuit() == fourth.getSuit() && first.getSuit() == fifth.getSuit();
 	}
 
-	public boolean checkStraight(Card first, Card second, Card third, Card fourth, Card fifth)
+	public boolean checkStraight(Card[] hand)
 	{
+		int[] tmp = new int[hand.length];
+		boolean check = true;
 
+		for (int index = 0; index < tmp.length; index++)
+		{
+			tmp[index] = hand[index].getCardNumber() % 13;
+		}
+		Arrays.sort(tmp);
+
+		for (int index = 0; index < tmp.length - 1; index++)
+		{
+			if (tmp[index] + 1 != tmp[index + 1])
+			{
+				check = false;
+				break;
+			}
+		}
+		return check;
 	}
+
 
 	public boolean checkFullHouse(Card first, Card second, Card third, Card fourth, Card fifth)
 	{
