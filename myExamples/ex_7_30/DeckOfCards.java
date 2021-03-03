@@ -138,6 +138,23 @@ public class DeckOfCards{
 							  {hand[0], hand[2], hand[3], hand[4]},
 							  {hand[1], hand[2], hand[3], hand[4]}};
 
+		Card[][] pairsOfTwo = {{hand[0], hand[1], hand[2], hand[3]},
+							   {hand[0], hand[1], hand[2], hand[4]},
+							   {hand[0], hand[1], hand[3], hand[4]},
+							   {hand[0], hand[2], hand[1], hand[3]},
+							   {hand[0], hand[2], hand[1], hand[4]},
+							   {hand[0], hand[2], hand[3], hand[4]},
+							   {hand[0], hand[3], hand[1], hand[2]},
+							   {hand[0], hand[3], hand[1], hand[4]},
+							   {hand[0], hand[3], hand[2], hand[4]},
+							   {hand[0], hand[4], hand[1], hand[2]},
+							   {hand[0], hand[4], hand[1], hand[3]},
+							   {hand[0], hand[4], hand[2], hand[3]},
+							   {hand[1], hand[2], hand[3], hand[4]},
+							   {hand[1], hand[3], hand[2], hand[4]},
+							   {hand[1], hand[4], hand[2], hand[3]}};
+
+
 
 		System.out.println();
 
@@ -147,32 +164,32 @@ public class DeckOfCards{
 			{
 				System.out.println("Full House");
 			}
-			if (checkStraight(hand))
-			{
-				System.out.println("Straight");
-			}
-			if (checkFlush(p5Choose3[i][0], p5Choose3[i][1], p5Choose3[i][2], p5Choose2[length - 1 - i][0], p5Choose2[length - 1 - i][1]))
+			else if (checkFlush(p5Choose3[i][0], p5Choose3[i][1], p5Choose3[i][2], p5Choose2[length - 1 - i][0], p5Choose2[length - 1 - i][1]))
 			{
 				System.out.println("Flush");
 			}
-			if (i % 2 == 0 && checkFourOfAKind(p5Choose4[i / 2][0], p5Choose4[i / 2][1], p5Choose4[i / 2][2], p5Choose4[i / 2][3]))
+			else if (i % 2 == 0 && checkFourOfAKind(p5Choose4[i / 2][0], p5Choose4[i / 2][1], p5Choose4[i / 2][2], p5Choose4[i / 2][3]))
 			{
 				System.out.println("FourOfAKind");
 			}
-			if (checkThreeOfAKind(p5Choose3[i][0], p5Choose3[i][1], p5Choose3[i][2]))
+			else if (checkThreeOfAKind(p5Choose3[i][0], p5Choose3[i][1], p5Choose3[i][2]))
 			{
 				System.out.println("ThreeOfAKind");
 			}
-			if (checkTwoPairs(p5Choose4[i % 5][i % 2], p5Choose4[i % 5][i % 2 + 1], p5Choose4[i % 5][i % 2 + 2], p5Choose4[i % 5][(i % 2 + 3) % 4]))
-			{
-				System.out.println("TwoPairs");
-			}
-			if (checkPair(p5Choose2[i][0], p5Choose2[i][1]))
+			else if (checkPair(p5Choose2[i][0], p5Choose2[i][1]))
 			{
 				System.out.println("Pair");
 			}
-
-
+		}
+		if (checkStraight(hand))
+		{
+			System.out.println("Straight");
+		}
+		for (Card[] pairsHand : pairsOfTwo){
+			if (checkTwoPairs(pairsHand[0], pairsHand[1], pairsHand[2], pairsHand[3]))
+			{
+				System.out.println("TwoPairs");
+			}
 		}
 
 	}
