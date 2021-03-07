@@ -14,6 +14,6 @@ public class Main{
 			System.out.println(dealer.get(i));
 		}
 		Card[] dealerArray = dealer.toArray(new Card[dealer.size()]);
-		deck.combinations(dealerArray);
+		System.out.println(deck.evaluate(dealer));
 	}
 }

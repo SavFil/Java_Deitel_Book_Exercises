@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DeckOfCards{
@@ -165,22 +166,22 @@ public class DeckOfCards{
 			if (checkFullHouse(hand[p5C3[i][0]], hand[p5C3[i][1]], hand[p5C3[i][2]], hand[p5C2[length - 1 - i][0]], hand[p5C2[length - 1 - i][1]]))
 			{
 				System.out.println("Full House");
-				points += 25;
+				points = 25;
 			}
 			else if (checkFlush(hand[p5C3[i][0]], hand[p5C3[i][1]], hand[p5C3[i][2]], hand[p5C2[length - 1 - i][0]], hand[p5C2[length - 1 - i][1]]))
 			{
 				System.out.println("Flush");
-				points += 20;
+				points = 20;
 			}
 			else if (i % 2 == 0 && checkFourOfAKind(hand[p5C4[i / 2][0]], hand[p5C4[i / 2][1]], hand[p5C4[i / 2][2]], hand[p5C4[i / 2][3]]))
 			{
 				System.out.println("FourOfAKind");
-				points += 15;
+				points = 15;
 			}
 			else if (checkThreeOfAKind(hand[p5C3[i][0]], hand[p5C3[i][1]], hand[p5C3[i][2]]))
 			{
 				System.out.println("ThreeOfAKind");
-				points += 10;
+				points = 10;
 			}
 			else if (checkPair(hand[p5C2[i][0]], hand[p5C2[i][1]]))
 			{
@@ -193,17 +194,72 @@ public class DeckOfCards{
 		if (checkStraight(hand))
 		{
 			System.out.println("Straight");
-			points += 24;
+			points = 24;
 		}
 		for (int i = 0; i < pairsOfTwo.length; i++){
 			if (checkTwoPairs(hand[pairsOfTwo[i][0]], hand[pairsOfTwo[i][1]], hand[pairsOfTwo[i][2]], hand[pairsOfTwo[i][3]]))
 			{
 				System.out.println("TwoPairs");
-				points += 8;
+				points = 8;
 			}
 		}
 
 		return points;
 	}
 
+	public int evaluate(ArrayList<Card> hand)
+	{
+		int length = 10;
+		int drawCard = 0;
+		int points = 0;
+		ArrayList<Card> tmp = new ArrayList<Card>();
+
+		while (drawCard < 3)
+		{
+			for (int i = 0; i < length; i++)
+			{
+				if (checkPair(hand.get(p5C2[i][0]), hand.get(p5C2[i][1])))
+				{
+					//System.out.println("Pair");
+					//System.out.printf("%-19s%-19s%-3d%-3d%n",hand.get(p5C2[i][0]).getFace(), hand.get(p5C2[i][1]).getFace(), p5C2[i][0], p5C2[i][1]);
+
+					if (!tmp.contains(hand.get(p5C2[i][0])))
+					{
+						tmp.add(hand.get(p5C2[i][0]));
+					}
+					if (!tmp.contains(hand.get(p5C2[i][1])))
+					{
+						tmp.add(hand.get(p5C2[i][1]));
+					}
+
+				}
+			}
+
+			if (tmp.size() == 0)
+			{
+				tmp.add(hand.get(0));
+				tmp.add(hand.get(1));
+				tmp.add(hand.get(2));
+				tmp.add(hand.get(3));
+			}
+
+			while (tmp.size() < 5)
+			{
+				tmp.add(dealCard());
+				drawCard++;
+				if (drawCard <= 3 && tmp.size() == 5)
+				{
+					points = combinations(tmp.toArray(new Card[tmp.size()]));
+					break;
+				}
+
+			}
+
+			hand.clear();
+			hand.addAll(tmp);
+			tmp.clear();
+	    }
+		return points;
+	}
 }
+
