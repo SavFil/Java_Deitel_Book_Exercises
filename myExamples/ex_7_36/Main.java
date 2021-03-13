@@ -31,9 +31,38 @@ public class Main{
 											0000,
 											0000};
 
+	private static final int[] PROGRAM_B = {1009,
+											1010,
+											2009,
+											3110,
+											4107,
+											1109,
+											4300,
+											1110,
+											4300,
+											0000,
+											0000,
+											0000};
+
+	private static final int[] PROGRAM_C = {0010,
+											0001,
+											1011,
+											2014,
+											3011,
+											2114,
+											2000,
+											3101,
+											2100,
+											4212,
+											4002,
+											0000,
+											1114,
+											4300,
+											0000,
+											0000};
 	public static void main(String[] args){
 
-		loadProgramInMemory(PROGRAM_A);
+		loadProgramInMemory(PROGRAM_C);
 
 		for (int index = 0; index < memory.length; index++)
 		{
@@ -45,10 +74,39 @@ public class Main{
 			{
 				case READ:
 					int input = keyboard.nextInt();
-					memory[input % 100] = input / 100;
+					memory[location] = input;
 					break;
 				case WRITE:
 					System.out.printf("%d%n", memory[location]);
+					break;
+				case LOAD:
+					accumulator = memory[location];
+					break;
+				case STORE:
+					memory[location] = accumulator;
+					break;
+				case ADD:
+					accumulator += memory[location];
+					break;
+				case SUBTRACT:
+					accumulator -= memory[location];
+					break;
+				case DIVIDE:
+					accumulator -= memory[location];
+					break;
+				case MULTIPLY:
+					accumulator *= memory[location];
+					break;
+				case BRANCH:
+					index = location - 1;
+					break;
+				case BRANCHNEG:
+					if (accumulator < 0)
+						index = location - 1;
+					break;
+				case BRANCHZERO:
+					if (accumulator == 0)
+						index = location - 1;
 					break;
 			}
 
