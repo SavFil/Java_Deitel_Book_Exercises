@@ -44,26 +44,72 @@ public class Main{
 											0000,
 											0000};
 
-	private static final int[] PROGRAM_C = {0010,
-											0001,
-											1011,
-											2014,
-											3011,
-											2114,
-											2000,
-											3101,
-											2100,
-											4212,
-											4002,
-											0000,
-											1114,
+	private static final int[] PROGRAM_C = {2009,
+											3010,
+											2109,
+											1010,
+											2010,
+											4207,
+											4000,
+											1109,
 											4300,
 											0000,
 											0000};
+
+	private static final int[] PROGRAM_D = {0006,
+											0001,
+											2017,
+											1016,
+											3016,
+											2117,
+											2000,
+											4211,
+											3101,
+											2100,
+											4002,
+											2017,
+											3218,
+											2117,
+											1117,
+											4300,
+											0000,
+											0000,
+											0007};
+
+	private static final int[] PROGRAM_E = {0001,
+											1002,
+											0000,
+											1024,
+											2024,
+											1025,
+											3125,
+											4112,
+											2026,
+											2127,
+											2024,
+											4015,
+											2026,
+											2127,
+											2025,
+											2128,
+											2002,
+											3100,
+											2102,
+											4222,
+											2028,
+											4027,
+											1128,
+											4300,
+											0000,
+											0000,
+											0005,
+											0000,
+											0000,
+
+											};
 	public static void main(String[] args){
 
-		loadProgramInMemory(PROGRAM_C);
-
+		loadProgramInMemory(PROGRAM_E);
 		for (int index = 0; index < memory.length; index++)
 		{
 			int instruction = memory[index] / 100;
@@ -92,7 +138,7 @@ public class Main{
 					accumulator -= memory[location];
 					break;
 				case DIVIDE:
-					accumulator -= memory[location];
+					accumulator /= memory[location];
 					break;
 				case MULTIPLY:
 					accumulator *= memory[location];
