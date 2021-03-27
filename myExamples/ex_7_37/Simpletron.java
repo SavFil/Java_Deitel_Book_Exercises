@@ -109,9 +109,9 @@ public class Simpletron{
 											0000,
 
 											};
-	public static void main(String[] args){
+	public void runProgram(){
 
-		loadProgramInMemory(PROGRAM_E);
+		//loadProgramInMemory(PROGRAM_E);
 		for (int index = 0; index < memory.length; index++)
 		{
 			int instruction = memory[index] / 100;
@@ -169,7 +169,7 @@ public class Simpletron{
 		System.arraycopy(program, 0, memory, 0, program.length);
 	}
 
-	public static void setMemory(int data)
+	public void setMemory(int data)
 	{
 		if (memoryIndex < memorySize)
 		{
@@ -177,12 +177,12 @@ public class Simpletron{
 		}
 	}
 
-	public static int getMemoryIndex()
+	public int getMemoryIndex()
 	{
 		return memoryIndex;
 	}
 
-	public static int getDataAtIndex()
+	public int getDataAtIndex()
 	{
 		return memory[memoryIndex];
 	}
