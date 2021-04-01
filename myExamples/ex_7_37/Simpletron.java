@@ -19,8 +19,9 @@ public class Simpletron{
 
 	private static final int memorySize = 100;
 	private static final int[] memory = new int[memorySize];
-	private static int memoryIndex = 0;
+	private static int instructionCounter = 0;
 	private static int accumulator;
+	private static int instructionRegister = 0;
 
 	private static final int[] PROGRAM_A = {1007,
 											1008,
@@ -114,8 +115,10 @@ public class Simpletron{
 		//loadProgramInMemory(PROGRAM_E);
 		for (int index = 0; index < memory.length; index++)
 		{
-			int instruction = memory[index] / 100;
-			int location = memory[index] % 100;
+			instructionRegister = getDataAtIndex();
+
+			int instruction = instructionRegister / 100;
+			int location = instructionRegister % 100;
 
 
 			switch (instruction)
@@ -171,20 +174,20 @@ public class Simpletron{
 
 	public void setMemory(int data)
 	{
-		if (memoryIndex < memorySize)
+		if (instructionCounter < memorySize)
 		{
-			memory[memoryIndex++] = data;
+			memory[instructionCounter++] = data;
 		}
 	}
 
 	public int getMemoryIndex()
 	{
-		return memoryIndex;
+		return instructionCounter;
 	}
 
 	public int getDataAtIndex()
 	{
-		return memory[memoryIndex];
+		return memory[instructionCounter];
 	}
 
 }
