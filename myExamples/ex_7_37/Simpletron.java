@@ -117,51 +117,51 @@ public class Simpletron{
 		{
 			instructionRegister = getDataAtIndex();
 
-			int instruction = instructionRegister / 100;
-			int location = instructionRegister % 100;
+			int operationCode = instructionRegister / 100;
+			int operand = instructionRegister % 100;
 
 
-			switch (instruction)
+			switch (operationCode)
 			{
 				case READ:
 					int input = keyboard.nextInt();
-					memory[location] = input;
+					memory[operand] = input;
 					break;
 				case WRITE:
-					System.out.printf("%d%n", memory[location]);
+					System.out.printf("%d%n", memory[operand]);
 					break;
 				case LOAD:
-					accumulator = memory[location];
+					accumulator = memory[operand];
 					break;
 				case STORE:
-					memory[location] = accumulator;
+					memory[operand] = accumulator;
 					break;
 				case ADD:
-					accumulator += memory[location];
+					accumulator += memory[operand];
 					break;
 				case SUBTRACT:
-					accumulator -= memory[location];
+					accumulator -= memory[operand];
 					break;
 				case DIVIDE:
-					accumulator /= memory[location];
+					accumulator /= memory[operand];
 					break;
 				case MULTIPLY:
-					accumulator *= memory[location];
+					accumulator *= memory[operand];
 					break;
 				case BRANCH:
-					index = location - 1;
+					index = operand - 1;
 					break;
 				case BRANCHNEG:
 					if (accumulator < 0)
-						index = location - 1;
+						index = operand - 1;
 					break;
 				case BRANCHZERO:
 					if (accumulator == 0)
-						index = location - 1;
+						index = operand - 1;
 					break;
 			}
 
-			if (instruction == HALT)
+			if (operationCode == HALT)
 			{
 				break;
 			}
