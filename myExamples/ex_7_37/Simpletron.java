@@ -115,8 +115,7 @@ public class Simpletron{
 		//loadProgramInMemory(PROGRAM_E);
 		for (int index = 0; index < memory.length; index++)
 		{
-			instructionRegister = getDataAtIndex();
-
+			instructionRegister = memory[index];
 			int operationCode = instructionRegister / 100;
 			int operand = instructionRegister % 100;
 
@@ -163,6 +162,7 @@ public class Simpletron{
 
 			if (operationCode == HALT)
 			{
+				System.out.println("*** Simpletron execution terminated ***");
 				break;
 			}
 		}
