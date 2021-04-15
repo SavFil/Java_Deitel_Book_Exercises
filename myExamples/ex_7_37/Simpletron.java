@@ -20,8 +20,10 @@ public class Simpletron{
 	private static final int memorySize = 100;
 	private static final int[] memory = new int[memorySize];
 	private static int instructionCounter = 0;
-	private static int accumulator;
+	private static int accumulator = 0;
 	private static int instructionRegister = 0;
+	private static int operationCode = 0;
+	private static int operand = 0;
 
 	private static final int[] PROGRAM_A = {1007,
 											1008,
@@ -116,8 +118,8 @@ public class Simpletron{
 		for (int index = 0; index < memory.length; index++)
 		{
 			instructionRegister = memory[index];
-			int operationCode = instructionRegister / 100;
-			int operand = instructionRegister % 100;
+			operationCode = instructionRegister / 100;
+			operand = instructionRegister % 100;
 
 
 			switch (operationCode)
