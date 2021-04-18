@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Simpletron{
 
-	private static final Scanner keyboard = new Scanner(System.in);
+	private final Scanner keyboard = new Scanner(System.in);
 
 	private static final int READ       = 10;
 	private static final int WRITE      = 11;
@@ -17,13 +17,13 @@ public class Simpletron{
 	private static final int BRANCHZERO = 42;
 	private static final int HALT       = 43;
 
-	private static final int memorySize = 100;
-	private static final int[] memory = new int[memorySize];
-	private static int instructionCounter = 0;
-	private static int accumulator = 0;
-	private static int instructionRegister = 0;
-	private static int operationCode = 0;
-	private static int operand = 0;
+	private final int memorySize = 100;
+	private final int[] memory = new int[memorySize];
+	private int instructionCounter = 0;
+	private int accumulator = 0;
+	private int instructionRegister = 0;
+	private int operationCode = 0;
+	private int operand = 0;
 
 	private static final int[] PROGRAM_A = {1007,
 											1008,
@@ -170,7 +170,7 @@ public class Simpletron{
 		}
 	}
 
-	public static void loadProgramInMemory(int[] program){
+	public void loadProgramInMemory(int[] program){
 		System.arraycopy(program, 0, memory, 0, program.length);
 	}
 
@@ -192,4 +192,36 @@ public class Simpletron{
 		return memory[instructionCounter];
 	}
 
+	public int getAccumulator()
+	{
+		return accumulator;
+	}
+
+	public int getInstructionRegister()
+	{
+		return instructionRegister;
+	}
+
+	public int getOperationCode()
+	{
+		return operationCode;
+	}
+
+	public int getOperand()
+	{
+		return operand;
+	}
+
+	public void printMemory()
+	{
+		System.out.printf("%n%n%28s%s%n", "", "MEMORY:");
+		System.out.print("     0     1     2     3     4     5     6     7     8     9");
+		for (int index = 0; index < memory.length; index++){
+			if (index % 10 == 0)
+			{
+				System.out.printf("%n%-3d", index);
+			}
+			System.out.printf("+%04d ", memory[index]);
+		}
+	}
 }
